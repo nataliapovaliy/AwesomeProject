@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, View, Text, TextInput, Button } from 'react-native';
+import {
+    TouchableWithoutFeedback,
+    KeyboardAvoidingView,
+    Keyboard,
+    StyleSheet,
+    ImageBackground,
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Alert, 
+    Platform
+} from 'react-native';
 import { useFonts } from 'expo-font';
 
-// const initialState = {
-//     email: '',
-//     password: '',
-// };
-
-export default function LoginScreen() {
-    
+export default function LoginScreen() {    
     const [fontsLoaded] = useFonts({
     RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
     RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
@@ -18,36 +24,55 @@ export default function LoginScreen() {
         return null
     }
 
-    // const [state, setState] = useState(initialState);
-        
-        return (
-            <View style={styles.container}>
-                <ImageBackground
-                    source={require('../assets/images/imgbg.png')}
-                    style={styles.imageBg}>
-                    
-                    <View style={styles.logBg}>
-                        <Text style={styles.title}>Авторизація</Text>
-                        <View style={styles.logForm}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder='Адреса електронної пошти' />
-                        </View>
-                        <View style={styles.pass}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder='Пароль' />
-                            <Text style={styles.textInput}> Показати </Text>
-                        </View>
-                        <View style={styles.btn}>
-                            <Text style={styles.btnText}>Авторизуватися</Text>
-                        </View>
-                        <Text style={styles.txtForSignUp}>Немає аккаунта? Зареєструватися</Text>
-                            
-                    </View>
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
 
-                </ImageBackground>
+    const onLogin = () => {
+        Alert.alert('Credentials', `${email} + ${pass}`);
+    }
+        
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}>
+                    <ImageBackground
+                        source={require('../assets/images/imgbg.png')}
+                        style={styles.imageBg}>
+                    
+                        <View style={styles.logBg}>
+                            <Text style={styles.title}>Авторизація</Text>
+
+                            <View style={styles.logForm}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder='Адреса електронної пошти'
+                                    autoComplete="email"
+                                    value={email}
+                                    onChangeText={setEmail}
+                                />
+                            </View>
+
+                            <View style={styles.pass}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder='Пароль'
+                                    autoComplete="password"
+                                    value={pass}
+                                    onChangeText={setPass}
+                                />
+                                <Text style={styles.textInput}> Показати </Text>
+                            </View>
+                            <TouchableOpacity style={styles.btn} onPress={onLogin}>
+                                <Text style={styles.btnText}>Авторизуватися</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.txtForSignUp}>Немає аккаунта? Зареєструватися</Text>
+                                
+                        </View>
+                    </ImageBackground>
+                </KeyboardAvoidingView>                
             </View>
+        </TouchableWithoutFeedback>
+            
         )
 }
 
