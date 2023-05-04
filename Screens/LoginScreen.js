@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
 import { StyleSheet, ImageBackground, View, Text, TextInput, Button } from 'react-native';
-// import { useFonts } from 'expo-font';
+import { useFonts } from 'expo-font';
 
-const initialState = {
-    email: '',
-    password: '',
-};
+// const initialState = {
+//     email: '',
+//     password: '',
+// };
 
 export default function LoginScreen() {
     
-    // const [fontsLoaded] = useFonts({
-    // RobotoBold: require('assets/fonts/Roboto-Bold.ttf'),
-    // RobotoMedium: require('assets/fonts/RobotoMedium.ttf'),
-    // RobotoRegular: require('assets/fonts/RobotoRegular.ttf'),
-    // });
+    const [fontsLoaded] = useFonts({
+    RobotoMedium: require('../assets/fonts/RobotoMedium.ttf'),
+    RobotoRegular: require('../assets/fonts/RobotoRegular.ttf'),
+    });
 
-    const [state, setState] = useState(initialState);
-    
-    
-    
+    if (!fontsLoaded) {
+        return null
+    }
+
+    // const [state, setState] = useState(initialState);
+        
         return (
             <View style={styles.container}>
                 <ImageBackground
-                    source={require('../images/imgbg.png')}
+                    source={require('../assets/images/imgbg.png')}
                     style={styles.imageBg}>
                     
                     <View style={styles.logBg}>
@@ -30,12 +31,12 @@ export default function LoginScreen() {
                         <View style={styles.logForm}>
                             <TextInput
                                 style={styles.input}
-                                placeholder='Email' />
+                                placeholder='Адреса електронної пошти' />
                         </View>
                         <View style={styles.pass}>
                             <TextInput
                                 style={styles.input}
-                                placeholder='Password' />
+                                placeholder='Пароль' />
                         </View>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Авторизуватися</Text>
