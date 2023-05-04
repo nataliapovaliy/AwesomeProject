@@ -10,9 +10,9 @@ import { useFonts } from 'expo-font';
 export default function LoginScreen() {
     
     const [fontsLoaded] = useFonts({
-    RobotoMedium: require('../assets/fonts/RobotoMedium.ttf'),
-    RobotoRegular: require('../assets/fonts/RobotoRegular.ttf'),
-    });
+    RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
+    RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
+    })
 
     if (!fontsLoaded) {
         return null
@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
     },
     logForm: {
         marginTop: 33,
+        // height: 489,
         gap: 16,
     },
     input: {
         height: 50,
         width: 343,
-        // marginHorizontal: 16,
         marginBottom: 16,
         paddingHorizontal: 16,
 

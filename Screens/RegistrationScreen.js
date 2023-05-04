@@ -10,7 +10,7 @@ import {
 import { AntDesign } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 
-export const RegistrationScreen = () => {
+export default function RegistrationScreen() {
     const [fontsLoaded] = useFonts({
     RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
     RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
