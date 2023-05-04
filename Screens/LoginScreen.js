@@ -37,6 +37,7 @@ export default function LoginScreen() {
                             <TextInput
                                 style={styles.input}
                                 placeholder='Пароль' />
+                            <Text style={styles.textInput}> Показати </Text>
                         </View>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Авторизуватися</Text>
@@ -99,6 +100,13 @@ const styles = StyleSheet.create({
     },
     pass: {
         position: 'relative',
+    },
+    textInput: {
+        position: 'absolute',
+        right: 32,
+        top: 16,
+        color: '#1B4371',
+        fontSize: 16,
     },
     btn: {
         marginTop: 27,
