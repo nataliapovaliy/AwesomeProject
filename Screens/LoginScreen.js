@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { useFonts } from 'expo-font';
 
-export default function LoginScreen() {    
+export const LoginScreen = () => {    
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
