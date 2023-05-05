@@ -15,22 +15,24 @@ import {
 import { useFonts } from 'expo-font';
 
 export default function LoginScreen() {    
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
     const [fontsLoaded] = useFonts({
-    RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
-    RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
-    })
+        RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
+        RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
+    })    
+
+    const onLogin = () => {
+        Alert.alert('Credentials', `${email} + ${pass}`);
+        setEmail('');
+        setPass('');
+    }
 
     if (!fontsLoaded) {
         return null
     }
 
-    const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
-
-    const onLogin = () => {
-        Alert.alert('Credentials', `${email} + ${pass}`);
-    }
-        
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
@@ -39,6 +41,7 @@ export default function LoginScreen() {
                         source={require('../assets/images/imgbg.png')}
                         style={styles.imageBg}>
                     
+        
                         <View style={styles.logBg}>
                             <Text style={styles.title}>Авторизація</Text>
 
