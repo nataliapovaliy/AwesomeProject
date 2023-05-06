@@ -18,13 +18,13 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
         <NavigationContainer>
-          <MainStack.Navigator initialRouteName="LoginScreen">
-            <MainStack.Screen name="RegistrationScreen" component={RegistrationScreen} />
-            <MainStack.Screen name="LoginScreen" component={LoginScreen} />
-            <MainStack.Screen name="Home" component={Home} />
+          <MainStack.Navigator initialRouteName="Home">
+            <MainStack.Screen name="RegistrationScreen" component={RegistrationScreen} options={{ headerShown: false }}/>
+            <MainStack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+            <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <MainStack.Screen name="PostsScreen" component={PostsScreen} />
             <MainStack.Screen name="CreatPostsScreen" component={CreatPostsScreen} />
-            <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <MainStack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
           </MainStack.Navigator>
         </NavigationContainer>
     </View>

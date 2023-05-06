@@ -1,68 +1,78 @@
 import React from 'react';
-// import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { PostsScreen } from './PostsScreen';
-import { CreatePostsScreen } from './CreatePostsScreen';
+import { CreatPostsScreen } from './CreatePostsScreen';
 import { ProfileScreen } from './ProfileScreen';
-import { StyleSheet, View } from 'react-native';
-import { useFonts } from 'expo-font';
-import { AntDesign } from '@expo/vector-icons'; 
+import {Header} from './Header';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Feather } from '@expo/vector-icons';
 
-const MainStack = createStackNavigator()
+const Tabs = createBottomTabNavigator();
 
 export const Home = () => {
-  const [fontsLoaded] = useFonts({
-        RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
-  })
-  
-  if (!fontsLoaded) {
-        return null
-  }
-
-  return (<></>)
-  
-  // return (
-  //   <NavigationContainer>
-  //     <MainStack.Navigator initialRouteName="PostsScreen">
-  //       <MainStack.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-  //       <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
-  //       <MainStack.Screen
-  //         name="PostsScreen" component={PostsScreen}
-  //         options={{
-  //             title: 'Публікації',
-  //             headerStyle: {
-  //               boxShadow: '0 0.5 0 rgba(0, 0, 0, 0.3)',
-  //               backdropFilter: 'blur(13.5914)',
-  //             },
-  //             headerTintColor: '#212121',
-  //             headerTitleStyle: {
-  //               fontFamily: 'Roboto-Regular',
-  //               fontSize: 17,
-  //               lineHeight: 22,
-  //             },
-  //             headerLeft: () => (
-  //               <View style={styles.button} onPress={() => alert('This is a button!')}>
-  //                 <AntDesign name="arrowleft" size={24} color="#212121" />
-  //               </View>
-                
-
-  //               // <Button
-  //               //   onPress={() => alert('This is a button!')}
-  //               //   title="Press me"
-  //               //   color="#fff"
-  //               // />
-  //             ),
-  //           }}
-  //       />
-  //     </MainStack.Navigator>
-  //   </NavigationContainer>
-  // )
+  return (
+    <Tabs.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          if (route.name === "Публікації") {            
+            return <Feather name="grid" size={size} color='rgba(33, 33, 33, 0.8)' />
+          } else if (route.name === "Створити публікацію") {
+            return <Ionicons name="add" size={size} color='#FFFFFF' style={styles.addPost} />
+          } else if (route.name === "Profile") {
+            return <Feather name="user" size={size} color={color} />
+          }          
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#FF6C00',
+        inactiveTintColor: 'rgba(33, 33, 33, 0.8)',
+        showLabel: false,
+        initialRouteName: 'PostsScreen',
+      }}
+    >
+      
+      <Tabs.Screen
+        name="Публікації"
+        component={PostsScreen}
+        options={{
+            headerShown: true,
+            header: ({ navigation, route }) => <Header title={route.name} />,
+          }}
+      />
+      
+      <Tabs.Screen
+        name="Створити публікацію"
+        component={CreatPostsScreen}
+        options={{
+            headerShown: true,
+            header: ({ navigation, route }) => <Header title={route.name} />,
+          }}
+      />
+      <Tabs.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+            headerShown: false,
+            header: ({ navigation, route }) => <Header title={route.name} />,
+          }}
+            />
+      
+    </Tabs.Navigator>
+  )
 }
 
 const styles = StyleSheet.create({
-  button: {
-    width: 24,
-    height: 24,
-  }
-})
+  addPost: {
+    textAlign: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#FF6C00',
+    width: 70,
+    height: 40,
+    borderRadius: 20,
+    // paddingTop: 9,
+  },
+});
+

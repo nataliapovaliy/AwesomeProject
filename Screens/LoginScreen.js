@@ -37,9 +37,9 @@ export const LoginScreen = () => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}>
+                {/* <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}> */}
                     <ImageBackground
                         source={require('../assets/images/imgbg.png')}
                         style={styles.imageBg}>
@@ -81,9 +81,9 @@ export const LoginScreen = () => {
                                 
                         </View>
                     </ImageBackground>
-                </KeyboardAvoidingView>                
+                {/* </KeyboardAvoidingView>                 */}
             </View>
-        </TouchableWithoutFeedback>
+        // </TouchableWithoutFeedback>
             
         )
 }
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     logBg: {
         paddingHorizontal: 16,
         width: '100%',
+        height: 489,
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
