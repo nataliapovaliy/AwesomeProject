@@ -9,8 +9,10 @@ import {
 } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
+import { useNavigation } from '@react-navigation/native';
 
 export const RegistrationScreen = () => {
+    const navigation = useNavigation();
     const [fontsLoaded] = useFonts({
     RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
     RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
@@ -63,7 +65,7 @@ export const RegistrationScreen = () => {
             <TouchableOpacity style={styles.button} title="Зареєструватись">
                 <Text style={styles.buttonText}> Зареєструватись </Text>
             </TouchableOpacity>
-            <Text style={styles.textYes}>Вже існує акаунт? Ввійти</Text>
+            <Text style={styles.textYes} onPress={() => navigation.navigate("LoginScreen")}>Вже існує акаунт? Ввійти</Text>
             </View>
         </ImageBackground>
         </View>
