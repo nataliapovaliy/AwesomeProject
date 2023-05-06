@@ -47,7 +47,7 @@ export const ProfileScreen = () => {
                 />
                 </View>
                 <View style={styles.wrapIonicons}>
-                <Ionicons name="exit-outline" size={24} color="#BDBDBD" />
+                <Ionicons name="exit-outline" size={24} color="#BDBDBD" onPress={() => navigation.navigate("LoginScreen")}/>
                 </View>
                 <Text style={styles.title}>Natali Romanova</Text>
                 <View style={styles.card}>
@@ -62,7 +62,7 @@ export const ProfileScreen = () => {
                 </View>
                 <View style={styles.cardInner}>
                     <View style={styles.cardWrapper}>
-                    <Ionicons name="chatbubble" size={24} color="#FF6C00" />
+                    <Ionicons name="chatbubble" size={24} color="#FF6C00" onPress={() => navigation.navigate("CommentsScreen")} />
                     <Text style={styles.cardNumber}>8</Text>
                     </View>
                     <View style={styles.cardWrapper}>
