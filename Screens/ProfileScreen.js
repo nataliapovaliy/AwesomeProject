@@ -16,9 +16,10 @@ import { AntDesign } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 import { SimpleLineIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
-
+import { useNavigation } from '@react-navigation/native';
 
 export const ProfileScreen = () => {
+    const navigation = useNavigation();
     const [fonts] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
         RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
