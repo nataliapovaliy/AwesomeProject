@@ -3,8 +3,7 @@ import { useFonts } from 'expo-font'
 import {
     StyleSheet,
     View,
-    Image,
-    Text,    
+    Text, TextInput,  
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
@@ -21,10 +20,10 @@ export const CreatPostsScreen = () => {
     }
 
     return (
-        <View style={styles.container}>  //container background
-            <View style={styles.wrapAvatar}>     // main container gap 32
+        <View style={styles.container}>  
+            <View style={styles.wrapAvatar}>     
                 
-                <View style={styles.wrapAvatarBox}>   //container whis foto
+                <View style={styles.wrapAvatarBox}>   
                     <View style={styles.wrapAvatarFoto}>
                         <View style={styles.wrapAvatarCamera}>
                             <Entypo name="camera" size={24} color="#BDBDBD" />
@@ -33,13 +32,13 @@ export const CreatPostsScreen = () => {
                 <Text style={styles.paragraf}>Завантажте фото</Text>
                 </View>
 
-                <Veiw style={styles.wrapAvatarForm}>  // container FORM for name and location
+                <View style={styles.wrapAvatarForm}>  
                     <TextInput
                         style={styles.input}
                         placeholder='Назва...'
                         autoComplete="namefoto"
-                        value={namefoto}
-                        onChangeText={setNamefoto}
+                        // value={namefoto}
+                        // onChangeText={setNamefoto}
                     />
                     <View style={styles.wrapLocation}>
                         <View style={styles.wrapLocationIcon}>
@@ -47,15 +46,15 @@ export const CreatPostsScreen = () => {
                         </View>
                         <TextInput
                         style={styles.input}
-                        placeholder='Локація...'
+                        placeholder='Локація...'                            
                         autoComplete="location"
-                        value={location}
-                        onChangeText={setLocation}
+                        // value={location}
+                        // onChangeText={setLocation}
                     />  
                     </View>                                      
-                </Veiw>
+                </View>
 
-                <View style={styles.button}>  // container for button
+                <View style={styles.button}>  
                     <Text style={styles.paragraf}>Опублікувати</Text>
                 </View>
             </View>
@@ -67,40 +66,54 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        // paddingHorizontal: 16,
+        // paddingLeft: 16,
+        // paddingRight: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     wrapAvatar: {
+        width: 343,
         display: 'flex',
         flexDirection: 'column',
         gap: 32,
+        marginHorizontal: 16,
+        // marginLeft: 16,
+        // marginRight: 16,
     },
     wrapAvatarBox: {
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
+        // alignItems: 'center',
+        justifyContent: 'center',
     },
     wrapAvatarFoto: {
         width: 343,
         height: 240,
-        background: '#F6F6F6',
+        backgroundColor: '#F6F6F6',
         border: '1 solid #E8E8E8',
         borderRadius: 8,
         position: 'relativ',
     },
     wrapAvatarCamera: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'absolute',
-        background: '#FFFFFF',
+        backgroundColor: '#FFFFFF',
         width: 60,
         height: 60,
-        top: -30,
-        left: 30,
+        top: 90,
+        left: 142,
         borderRadius: '50%',
     },
     paragraf: {
-        fontFamily: 'Roboto-Regular',
+        fontFamily: 'RobotoRegular',
         fontSize: 16,
         lineHeight: 19,
         color: '#BDBDBD',
+        textAlign: 'start',
     },
     wrapAvatarForm: {
         display: 'flex',
@@ -111,8 +124,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         width: 343,
         height: 50,
-        borderBottom: '1 solid #E8E8E8',
-        fontFamily: 'Roboto-Regular',
+        // borderBottom: '1 solid #E8E8E8',
+        borderBottomWidth: 1,
+        borderBottomColor: '#E8E8E8',
+        fontFamily: 'RobotoRegular',
         fontSize: 16,
         lineHeight: 19,
         color: '#BDBDBD',
@@ -120,13 +135,17 @@ const styles = StyleSheet.create({
     wrapLocation: {
         display: 'flex',
         flexDirection: 'row',
-        gap: 4,
+        // gap: 4,
     },
     button: {
         width: 343,
         height: 51,
-        padding: '16 32',
-        background: '#F6F6F6',
+        paddingHorizontal: 16,
+        paddingVertical: 32,
+        backgroundColor: '#F6F6F6',
         borderRadius: 100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })

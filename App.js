@@ -7,6 +7,9 @@ import { StyleSheet, View } from 'react-native'
 import { RegistrationScreen } from './Screens/RegistrationScreen'
 import { LoginScreen } from './Screens/LoginScreen'
 import { Home } from './Screens/Home'
+import { PostsScreen } from './Screens/PostsScreen'
+import {CreatPostsScreen} from './Screens/CreatePostsScreen'
+import { ProfileScreen } from './Screens/ProfileScreen'
 
 const MainStack = createStackNavigator()
 
@@ -15,12 +18,12 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
         <NavigationContainer>
-          <MainStack.Navigator initialRouteName="Home">
+          <MainStack.Navigator initialRouteName="LoginScreen">
             <MainStack.Screen name="RegistrationScreen" component={RegistrationScreen} />
             <MainStack.Screen name="LoginScreen" component={LoginScreen} />
             <MainStack.Screen name="Home" component={Home} />
             <MainStack.Screen name="PostsScreen" component={PostsScreen} />
-            <MainStack.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
+            <MainStack.Screen name="CreatPostsScreen" component={CreatPostsScreen} />
             <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
           </MainStack.Navigator>
         </NavigationContainer>

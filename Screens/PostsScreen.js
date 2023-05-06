@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titleUser: {
-        fontFamily: 'Roboto-Medium',
+        fontFamily: 'RobotoMedium',
         fontSize: 13,
         lineHeight: 15,
         color: '#212121',
     },
     paragrafUser: {
-        fontFamily: 'Roboto-Regular',
+        fontFamily: 'RobotoRegular',
         fontSize: 11,
         lineHeight: 13,
         display: 'flex',
