@@ -63,7 +63,7 @@ export const RegistrationScreen = () => {
                 <Text style={styles.textInput}> Показати </Text>
             </View>
             <TouchableOpacity style={styles.button} title="Зареєструватись">
-                <Text style={styles.buttonText}> Зареєструватись </Text>
+                <Text style={styles.buttonText} onPress={() => navigation.navigate("Home")}> Зареєструватись </Text>
             </TouchableOpacity>
             <Text style={styles.textYes} onPress={() => navigation.navigate("LoginScreen")}>Вже існує акаунт? Ввійти</Text>
             </View>

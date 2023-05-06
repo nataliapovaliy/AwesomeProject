@@ -3,8 +3,10 @@ import { useFonts } from 'expo-font';
 import { AntDesign } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, View, Text } from 'react-native-web';
+import { useNavigation } from '@react-navigation/native';
 
 export const Header = ({ title }) => {
+    const navigation = useNavigation();
     const [fontsLoaded] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
         RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
@@ -17,15 +19,15 @@ export const Header = ({ title }) => {
     return (
         <View style={styles.container}>
             <AntDesign name="arrowleft" size={24} color="#212121"
-                // style={styles.returnSvg}
                 backgroundColor={'transparent'}
-                // header={20}
+                onPress={() => navigation.navigate("Home")}
             />
             
             <Text style={styles.titleHeader}>{title}</Text>
 
             <MaterialIcons name="logout" size={24} color="black"
                 backgroundColor="transparent"
+                onPress={() => navigation.navigate("LoginScreen")}
             />
         </View>
     );
