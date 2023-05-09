@@ -1,19 +1,53 @@
-import React from 'react'
-import { useFonts } from 'expo-font'
+import React from 'react';
+import { useFonts } from 'expo-font';
 import {
     StyleSheet,
     View,
     Text, TextInput,  
+    TouchableOpacity,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons';
+import { Camera } from 'expo-camera'
+import * as MediaLibrary from 'expo-media-library'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import * as Location from 'expo-location'
+
+const initialState = {
+    name: '',
+    place: '',
+}
 
 export const CreatPostsScreen = () => {
+    const [camera, setCamera] = useState(null)
+    const [photo, setPhoto] = useState(null)
+    const [state, setState] = useState(initialState)
+    
     const [fontsLoaded] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
         RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
     }) 
+
+    const takePhoto = async () => {
+    const photo = await camera.takePictureAsync()
+    const location = await Location.getCurrentPositionAsync()
+    console.log('latitude', location.coords.latitude)
+    console.log('longitude', location.coords.longitude)
+    setPhoto(photo.uri)
+    console.log('photo', photo)
+    }
+
+    const sendPhoto = () => {
+        console.log('navigation', navigation)
+        navigation.navigate('PostsScreen', {
+        photo,
+        location,
+        state,
+        })
+        setState(initialState)
+        setPhoto('')
+    }
 
     if (!fontsLoaded) {
         return null
@@ -24,11 +58,25 @@ export const CreatPostsScreen = () => {
             <View style={styles.wrapAvatar}>     
                 
                 <View style={styles.wrapAvatarBox}>   
-                    <View style={styles.wrapAvatarFoto}>
+                    <Camera style={styles.camera} ref={setCamera}>
+                        {photo ? (
+                            <View style={styles.wrapAvatarFoto}>
+                                <Image source={{ uri: photo }} style={styles.wrapAvatarCamera}>
+                                <Entypo name="camera" size={24} color="#BDBDBD" />
+                                </Image>
+                            </View>
+                        ) : null}
+                        <TouchableOpacity style={styles.wrapAvatarCamera} onPress={takePhoto}>
+                            <Entypo name="camera" size={24} color="#BDBDBD" />
+                        </TouchableOpacity>
+                    </Camera>
+
+                    {/* <View style={styles.wrapAvatarFoto}>
                         <View style={styles.wrapAvatarCamera}>
                             <Entypo name="camera" size={24} color="#BDBDBD" />
                         </View>
-                    </View>
+                    </View> */}
+
                 <Text style={styles.paragraf}>Завантажте фото</Text>
                 </View>
 
@@ -37,9 +85,12 @@ export const CreatPostsScreen = () => {
                         style={styles.input}
                         placeholder='Назва...'
                         autoComplete="namefoto"
-                        // value={namefoto}
-                        // onChangeText={setNamefoto}
+                        value={state.name}
+                        onChangeText={(value) =>
+                            setState((prevState) => ({ ...prevState, name: value }))
+                        }
                     />
+
                     <View style={styles.wrapLocation}>
                         <View style={styles.wrapLocationIcon}>
                             <Ionicons name="location-outline" size={24} color="#BDBDBD" />
@@ -48,15 +99,17 @@ export const CreatPostsScreen = () => {
                         style={styles.input}
                         placeholder='Локація...'                            
                         autoComplete="location"
-                        // value={location}
-                        // onChangeText={setLocation}
+                        value={state.place}
+                        onChangeText={(value) =>
+                            setState((prevState) => ({ ...prevState, place: value }))
+                        }
                     />  
                     </View>                                      
                 </View>
 
-                <View style={styles.button}>  
-                    <Text style={styles.paragraf}>Опублікувати</Text>
-                </View>
+                <TouchableOpacity style={styles.button}>  
+                    <Text style={styles.paragraf} onPress={sendPhoto}>Опублікувати</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -66,9 +119,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        // paddingHorizontal: 16,
-        // paddingLeft: 16,
-        // paddingRight: 16,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -78,15 +128,17 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         gap: 32,
         marginHorizontal: 16,
-        // marginLeft: 16,
-        // marginRight: 16,
     },
     wrapAvatarBox: {
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
-        // alignItems: 'center',
         justifyContent: 'center',
+    },
+    camera: {
+        height: 240,
+        alignItems: 'center',
+        position: 'relativ',
     },
     wrapAvatarFoto: {
         width: 343,
@@ -135,7 +187,6 @@ const styles = StyleSheet.create({
     wrapLocation: {
         display: 'flex',
         flexDirection: 'row',
-        // gap: 4,
     },
     button: {
         width: 343,
