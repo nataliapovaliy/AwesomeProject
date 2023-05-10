@@ -14,23 +14,36 @@ import {
 } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/auth/authOperations';
+
+const initialState = {
+    email: '',
+    password: '',
+}
 
 export const LoginScreen = () => {  
     const navigation = useNavigation();
-    const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
+    const [state, setstate] = useState(initialState);
+    const dispatch = useDispatch();
 
     const [fontsLoaded] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
         RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
     })    
 
-    const onLogin = () => {
-        console.log('Credentials', `${email} + ${pass}`);
-        setEmail('');
-        setPass('');
-        navigation.navigate("MapScreen")
+    const handleSubmit = () => {
+        setstate(initialState)
+        dispatch(login(state))
+        // console.log('click', state)
     }
+
+    // const onLogin = () => {
+    //     console.log('Credentials', `${email} + ${pass}`);
+    //     setEmail('');
+    //     setPass('');
+    //     navigation.navigate("MapScreen")
+    // }
 
     if (!fontsLoaded) {
         return null
@@ -54,7 +67,9 @@ export const LoginScreen = () => {
                                     placeholder='Адреса електронної пошти'
                                     autoComplete="email"
                                     value={email}
-                                    onChangeText={setEmail}
+                                    onChangeText={(value) =>
+                                        setstate((prevState) => ({ ...prevState, email: value }))
+                                    }
                                 />
                             </View>
 
@@ -64,18 +79,20 @@ export const LoginScreen = () => {
                                     placeholder='Пароль'
                                     autoComplete="password"
                                     value={pass}
-                                    onChangeText={setPass}
+                                    onChangeText={(value) =>
+                                        setstate((prevState) => ({ ...prevState, password: value }))
+                                    }
                                 />
                                 <Text style={styles.textInput}> Показати </Text>
                             </View>
 
-                            <TouchableOpacity style={styles.btn} onPress={onLogin}>
+                            <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
                                 <Text style={styles.btnText}>Авторизуватися</Text>
                             </TouchableOpacity>
 
                             <Text
                                 style={styles.txtForSignUp}
-                                onPress={() => navigation.navigate("RegistrationScreen")}
+                                onPress={() => navigation.navigate("Registration")}
                             >Немає аккаунта? Зареєструватися
                             </Text>
                                 

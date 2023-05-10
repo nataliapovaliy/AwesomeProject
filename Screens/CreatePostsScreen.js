@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
 import {
     StyleSheet,
@@ -38,14 +38,14 @@ export const CreatPostsScreen = () => {
     }
 
     const sendPhoto = () => {
-        console.log('navigation', navigation)
-        navigation.navigate('PostsScreen', {
+    console.log('navigation', navigation)
+    navigation.navigate('DefaultScreen', {
         photo,
         location,
         state,
-        })
-        setState(initialState)
-        setPhoto('')
+    })
+    setState(initialState)
+    setPhoto('')
     }
 
     if (!fontsLoaded) {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
-        justifyContent: 'center',
+        // justifyContent: 'center',
     },
     camera: {
         height: 240,
