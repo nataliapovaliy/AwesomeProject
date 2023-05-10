@@ -17,7 +17,7 @@ export const DefaultPostsScreen = ({ route }) => {
             <View style={styles.wrapUser}>
                 <Image
                 style={styles.avatarUser}
-                source={require('../assets/images/User.png')}
+                source={require('../assets/images/avatarUser.png')}
                 />
                 <View style={styles.wrapUserData}>
                     <Text style={styles.titleUser}>Natali Romanova</Text>

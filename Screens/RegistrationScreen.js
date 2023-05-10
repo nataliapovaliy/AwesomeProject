@@ -10,6 +10,7 @@ import {
 import { AntDesign } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native';
+import { Home } from './Home';
 
 export const RegistrationScreen = () => {
     const navigation = useNavigation();
@@ -63,7 +64,7 @@ export const RegistrationScreen = () => {
                 <Text style={styles.textInput}> Показати </Text>
             </View>
             <TouchableOpacity style={styles.button} title="Зареєструватись">
-                <Text style={styles.buttonText} onPress={() => navigation.navigate("Home")}> Зареєструватись </Text>
+                <Text style={styles.buttonText} onPress={() => <Home />}> Зареєструватись </Text>
             </TouchableOpacity>
             <Text style={styles.textYes} onPress={() => navigation.navigate("LoginScreen")}>Вже існує акаунт? Ввійти</Text>
             </View>

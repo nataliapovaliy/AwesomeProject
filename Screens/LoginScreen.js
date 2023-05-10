@@ -66,7 +66,7 @@ export const LoginScreen = () => {
                                     style={styles.input}
                                     placeholder='Адреса електронної пошти'
                                     autoComplete="email"
-                                    value={email}
+                                    value={state.email}
                                     onChangeText={(value) =>
                                         setstate((prevState) => ({ ...prevState, email: value }))
                                     }
@@ -78,7 +78,7 @@ export const LoginScreen = () => {
                                     style={styles.input}
                                     placeholder='Пароль'
                                     autoComplete="password"
-                                    value={pass}
+                                    value={state.password}
                                     onChangeText={(value) =>
                                         setstate((prevState) => ({ ...prevState, password: value }))
                                     }
