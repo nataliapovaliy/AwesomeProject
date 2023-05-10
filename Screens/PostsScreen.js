@@ -3,11 +3,11 @@ import {
     StyleSheet,
     View,
     Image,
-    Text,    
+    Text, FlatList    
 } from 'react-native';
 import { useFonts } from 'expo-font';
 
-export const PostsScreen = () => {
+export const PostsScreen = ({ route }) => {
     const [posts, setPosts] = useState([])
     // console.log('route.params', route.params)
     

@@ -29,7 +29,7 @@ export const LoginScreen = () => {
         console.log('Credentials', `${email} + ${pass}`);
         setEmail('');
         setPass('');
-        navigation.navigate("Home")
+        navigation.navigate("MapScreen")
     }
 
     if (!fontsLoaded) {

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFonts } from 'expo-font';
 import {
     StyleSheet,
     View,
     Text, TextInput,  
-    TouchableOpacity,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
@@ -20,7 +19,7 @@ const initialState = {
 }
 
 export const CreatPostsScreen = () => {
-    const [camera, setCamera] = useState(null)
+    const [camera, setCamera] = useState (null)
     const [photo, setPhoto] = useState(null)
     const [state, setState] = useState(initialState)
     
