@@ -17,7 +17,7 @@ export const register = createAsyncThunk(
         const user = res.user
         await updateProfile(user, {
             displayName: login,
-            photoURL: 'https://i.pravatar.cc/300',
+            photoURL: 'https://i.pravatar.cc/120',
         })
         return {
             userId: user.uid,

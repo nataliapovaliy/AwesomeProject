@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     StyleSheet,
     Text,
@@ -6,18 +6,41 @@ import {
     ImageBackground,
     TextInput,
     TouchableOpacity,
+    TouchableWithoutFeedback,
+    KeyboardAvoidingView,
+    Keyboard,
+    Platform,
 } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native';
 import { Home } from './Home';
+import { useDispatch } from 'react-redux';
+import { register } from '../redux/auth/authOperations';
+
+const initialState = {
+    login: '',
+    email: '',
+    password: '',
+}
 
 export const RegistrationScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+
+    const [state, setstate] = useState(initialState)
+
     const [fontsLoaded] = useFonts({
     RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
     RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
     })
+
+    const handleSubmit = () => {
+    dispatch(register(state))
+    setstate(initialState)
+    console.log('handleSubmit', state)
+    return (<Home />)
+    }
 
     if (!fontsLoaded) {
         return null
@@ -25,49 +48,71 @@ export const RegistrationScreen = () => {
 
     return (
         <View style={styles.container}>
-        <ImageBackground
-            source={require('../assets/images/imgbg.png')}
-            resizeMode="cover"
-            style={styles.image}
-        >
-            <View style={styles.form}>
-            <View style={styles.wrapImage}>
-                <AntDesign
-                name="pluscircleo"
-                size={25}
-                color="#FF6C00"
-                backgroundColor="white"
-                style={styles.buttonAddPhoto}
-                />
-            </View>
-            <Text style={styles.title}>Реєстрація</Text>
-            <TextInput
-                style={{
-                ...styles.input,
-                }}
-                placeholder="Логін"
-            />
-            <TextInput
-                style={{
-                ...styles.input,
-                }}
-                placeholder="Адреса електронної пошти"
-            />
+            <ImageBackground
+                source={require('../assets/images/imgbg.png')}
+                resizeMode="cover"
+                style={styles.image}
+            >
+                
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.form}>
+                    <View style={styles.wrapImage}>
+                        <AntDesign
+                        name="pluscircleo"
+                        size={25}
+                        color="#FF6C00"
+                        backgroundColor="white"
+                        style={styles.buttonAddPhoto}
+                        />
+                    </View>
+                    <Text style={styles.title}>Реєстрація</Text>
+                        
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Логін"
+                        value={state.login}
+                        onChangeText={(value) =>
+                            setstate((prevState) => ({ ...prevState, login: value }))
+                        }
+                        />
+                        
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Адреса електронної пошти"
+                            value={state.email}
+                            onChangeText={(value) =>
+                                setstate((prevState) => ({ ...prevState, email: value }))
+                            }
+                            autoComplete="email"
+                        />
 
-            <View style={styles.inputPass}>
-                <TextInput
-                style={{
-                    ...styles.input,
-                }}
-                placeholder="Пароль"
-                />
-                <Text style={styles.textInput}> Показати </Text>
-            </View>
-            <TouchableOpacity style={styles.button} title="Зареєструватись">
-                <Text style={styles.buttonText} onPress={() => <Home />}> Зареєструватись </Text>
-            </TouchableOpacity>
-            <Text style={styles.textYes} onPress={() => navigation.navigate("LoginScreen")}>Вже існує акаунт? Ввійти</Text>
-            </View>
+                        <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+                            <View style={styles.inputPass}>
+                                <TextInput
+                                style={styles.input}
+                                placeholder="Пароль"
+                                value={state.password}
+                                onChangeText={(value) =>
+                                    setstate((prevState) => ({ ...prevState, password: value }))
+                                }
+                                autoComplete="password"
+                                />
+
+                                <Text style={styles.textInput}> Показати </Text>
+                            </View>
+                        </KeyboardAvoidingView>
+
+                        <TouchableOpacity
+                            style={styles.button}
+                            title="Зареєструватись"
+                            onPress={handleSubmit}
+                        >
+                            <Text style={styles.buttonText}> Зареєструватись </Text>
+                        </TouchableOpacity>
+
+                        <Text style={styles.textYes} onPress={() => navigation.navigate("LoginScreen")}>Вже існує акаунт? Ввійти</Text>
+                </View>    
+            </TouchableWithoutFeedback>            
         </ImageBackground>
         </View>
     )
@@ -77,7 +122,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        fontFamily: 'RobotoRegular',
+        fontFamily: 'Roboto-Regular',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     image: {
         width: 400,
@@ -109,22 +156,22 @@ const styles = StyleSheet.create({
         lineHeight: 35,
         letterSpacing: 0.01,
         textAlign: 'center',
-        fontFamily: 'RobotoMedium',
+        fontFamily: 'Roboto-Medium',
     },
     form: {
-        marginTop: 33,
-        gap: 16,
-        backgroundColor: '#fff',
-        height: 549,
+        paddingHorizontal: 16,
         width: '100%',
-        padding: 16,
+        height: 549,
+        backgroundColor: '#FFFFFF',
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+        alignItems: 'center',
+        gap: 16,
     },
     input: {
         height: 50,
         width: 343,
-        marginHorizontal: 16,
         paddingHorizontal: 16,
-
         borderWidth: 1,
         borderRadius: 8,
         borderColor: '#E8E8E8',
