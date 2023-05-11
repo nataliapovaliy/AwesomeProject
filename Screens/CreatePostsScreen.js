@@ -3,25 +3,49 @@ import { useFonts } from 'expo-font';
 import {
     StyleSheet,
     View,
-    Text, TextInput,  
+    Text, TextInput, 
+    // TouchableWithoutFeedback,
+    // Dimensions,
+    // Platform,
+    TouchableOpacity,
+    Image,
+    // ImageBackground,
+    // KeyboardAvoidingView,
+    Keyboard,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
-import { Ionicons } from '@expo/vector-icons';
-import { Camera } from 'expo-camera'
+import { Ionicons, Feather, EvilIcons} from '@expo/vector-icons';
+// import { Camera } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+// import { TouchableOpacity } from 'react-native-gesture-handler'
 import * as Location from 'expo-location'
+// import { Camera, CameraType } from 'expo-camera';
+// import * as MediaLibrary from 'expo-media-library';
+// import * as Location from 'expo-location';
+import { CameraComponent } from './Camera';
+
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc } from 'firebase/firestore';
+import { db, storage } from '../firebase/config';
+import { selectName, selectUserId } from '../redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
 
 const initialState = {
     name: '',
-    place: '',
-}
+    location: '',
+    photo: null,
+    coordinate: null,
+};
 
 export const CreatPostsScreen = () => {
-    const [camera, setCamera] = useState (null)
-    const [photo, setPhoto] = useState(null)
-    const [state, setState] = useState(initialState)
+    const [cameraRef, setCameraRef] = useState(null);
+    const [state, setState] = useState(initialState);
+    // const [isFocused, setIsFocused] = useState(initialFocus);
+    // const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+    
+    const userId = useSelector(selectUserId);
+    const userName = useSelector(selectName);
     
     const [fontsLoaded] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
@@ -29,23 +53,50 @@ export const CreatPostsScreen = () => {
     }) 
 
     const takePhoto = async () => {
-    const photo = await camera.takePictureAsync()
-    const location = await Location.getCurrentPositionAsync()
-    console.log('latitude', location.coords.latitude)
-    console.log('longitude', location.coords.longitude)
-    setPhoto(photo.uri)
-    console.log('photo', photo)
+        const photo = await cameraRef.takePictureAsync();
+        const location = await Location.getCurrentPositionAsync({});
+        const coords = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+    };
+        setState(prevState => ({ ...prevState, photo: photo.uri, coordinate: coords }));
+        await MediaLibrary.createAssetAsync(photo.uri)
     }
 
-    const sendPhoto = () => {
-    console.log('navigation', navigation)
-    navigation.navigate('DefaultScreen', {
-        photo,
-        location,
-        state,
-    })
-    setState(initialState)
-    setPhoto('')
+    const openCamera = async () => {
+        setState(prevState => ({ ...prevState, photo: null}));
+        setCameraRef(cameraRef);
+        setIsKeyboardShown(false);
+    };
+
+    const uploadPhoto = async () => {
+        try {
+            const response = await fetch(state.photo); 
+            const file = await response.blob();
+            const uniquePostId = Date.now().toString();
+
+            const linkToFile = ref(storage, `imgPost/${uniquePostId}`);
+            await uploadBytes(linkToFile, file);
+            const photoUrl = await getDownloadURL(ref(storage, `imgPost/${uniquePostId}`)); 
+            const uploadedInfo = {
+                displayName: userName,
+                photo: photoUrl,
+                name: state.name,
+                location: state.location,
+                coordinate: state.coordinate,
+                userId,
+                likes: [],
+                comments: 0,
+            };
+
+            await addDoc(collection(db, 'posts'), uploadedInfo); 
+            Keyboard.dismiss();
+            setState(initialState);
+            setIsKeyboardShown(false);
+            navigation.navigate('Posts');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     if (!fontsLoaded) {
@@ -53,10 +104,22 @@ export const CreatPostsScreen = () => {
     }
 
     return (
-        <View style={styles.container}>  
+        // <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss();  setIsKeyboardShown(false)}}>
+            <View style={styles.container}>  
             <View style={styles.wrapAvatar}>     
-                
-                <View style={styles.wrapAvatarBox}>   
+                    {state.photo ? (
+                        <View style={styles.wrapAvatarBox}>
+                            <Image source={{ uri: state.photo }} style={styles.photo} />
+                            <TouchableOpacity style={styles.wrapAvatarCamera} onPress={openCamera}>
+                                <Feather name="camera" size={20} color="#FFFFFF" />
+                            </TouchableOpacity>
+                        </View>
+                    ): (
+                        <View style={styles.wrapAvatarFoto}>
+                            <CameraComponent makePhoto={takePhoto} location={state.location} photo={state.photo} setCameraRef={setCameraRef} />
+                        </View>
+                )}
+                {/* <View style={styles.wrapAvatarBox}>    */}
                     {/* <Camera style={styles.camera} ref={setCamera}>
                         {photo ? (
                             <View style={styles.wrapAvatarFoto}>
@@ -77,7 +140,7 @@ export const CreatPostsScreen = () => {
                     </View> */}
 
                 <Text style={styles.paragraf}>Завантажте фото</Text>
-                </View>
+                {/* </View> */}
 
                 <View style={styles.wrapAvatarForm}>  
                     <TextInput
@@ -85,9 +148,7 @@ export const CreatPostsScreen = () => {
                         placeholder='Назва...'
                         autoComplete="namefoto"
                         value={state.name}
-                        onChangeText={(value) =>
-                            setState((prevState) => ({ ...prevState, name: value }))
-                        }
+                        onChangeText={value => setState(prevState => ({ ...prevState, name: value }))}
                     />
 
                     <View style={styles.wrapLocation}>
@@ -98,19 +159,19 @@ export const CreatPostsScreen = () => {
                         style={styles.input}
                         placeholder='Локація...'                            
                         autoComplete="location"
-                        value={state.place}
-                        onChangeText={(value) =>
-                            setState((prevState) => ({ ...prevState, place: value }))
-                        }
+                        value={state.location}
+                        onChangeText={value => setState(prevState => ({ ...prevState, location: value }))}
                     />  
                     </View>                                      
                 </View>
 
-                <TouchableOpacity style={styles.button}>  
-                    <Text style={styles.paragraf} onPress={sendPhoto}>Опублікувати</Text>
+                <TouchableOpacity style={styles.button} onPress={uploadPhoto}>  
+                    <Text style={styles.paragraf}>Опублікувати</Text>
                 </TouchableOpacity>
             </View>
         </View>
+        // </TouchableWithoutFeedback>
+        
     )
 }
 
