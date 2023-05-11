@@ -57,7 +57,7 @@ export const CreatPostsScreen = () => {
             <View style={styles.wrapAvatar}>     
                 
                 <View style={styles.wrapAvatarBox}>   
-                    <Camera style={styles.camera} ref={setCamera}>
+                    {/* <Camera style={styles.camera} ref={setCamera}>
                         {photo ? (
                             <View style={styles.wrapAvatarFoto}>
                                 <Image source={{ uri: photo }} style={styles.wrapAvatarCamera}>
@@ -68,7 +68,7 @@ export const CreatPostsScreen = () => {
                         <TouchableOpacity style={styles.wrapAvatarCamera} onPress={takePhoto}>
                             <Entypo name="camera" size={24} color="#BDBDBD" />
                         </TouchableOpacity>
-                    </Camera>
+                    </Camera> */}
 
                     {/* <View style={styles.wrapAvatarFoto}>
                         <View style={styles.wrapAvatarCamera}>

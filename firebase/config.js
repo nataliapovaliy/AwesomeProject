@@ -10,7 +10,7 @@ const firebaseConfig = {
     storageBucket: "awesomeproject-2b852.appspot.com",
     messagingSenderId: "309565828878",
     appId: "1:309565828878:web:3aecc43a7416e60784f15f",
-    databaseURL: 'https://awesomeproject-2b852-default-rtdb.firebaseio.com',
+    // databaseURL: 'https://awesomeproject-2b852-default-rtdb.firebaseio.com',
 }
 
 const app = initializeApp(firebaseConfig)
