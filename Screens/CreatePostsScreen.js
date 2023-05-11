@@ -119,28 +119,8 @@ export const CreatPostsScreen = () => {
                             <CameraComponent makePhoto={takePhoto} location={state.location} photo={state.photo} setCameraRef={setCameraRef} />
                         </View>
                 )}
-                {/* <View style={styles.wrapAvatarBox}>    */}
-                    {/* <Camera style={styles.camera} ref={setCamera}>
-                        {photo ? (
-                            <View style={styles.wrapAvatarFoto}>
-                                <Image source={{ uri: photo }} style={styles.wrapAvatarCamera}>
-                                <Entypo name="camera" size={24} color="#BDBDBD" />
-                                </Image>
-                            </View>
-                        ) : null}
-                        <TouchableOpacity style={styles.wrapAvatarCamera} onPress={takePhoto}>
-                            <Entypo name="camera" size={24} color="#BDBDBD" />
-                        </TouchableOpacity>
-                    </Camera> */}
-
-                    {/* <View style={styles.wrapAvatarFoto}>
-                        <View style={styles.wrapAvatarCamera}>
-                            <Entypo name="camera" size={24} color="#BDBDBD" />
-                        </View>
-                    </View> */}
-
+                
                 <Text style={styles.paragraf}>Завантажте фото</Text>
-                {/* </View> */}
 
                 <View style={styles.wrapAvatarForm}>  
                     <TextInput
