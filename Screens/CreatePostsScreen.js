@@ -104,7 +104,6 @@ export const CreatPostsScreen = () => {
     }
 
     return (
-        // <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss();  setIsKeyboardShown(false)}}>
             <View style={styles.container}>  
             <View style={styles.wrapAvatar}>     
                     {state.photo ? (
@@ -150,7 +149,7 @@ export const CreatPostsScreen = () => {
                 </TouchableOpacity>
             </View>
         </View>
-        // </TouchableWithoutFeedback>
+
         
     )
 }
@@ -227,6 +226,10 @@ const styles = StyleSheet.create({
     wrapLocation: {
         display: 'flex',
         flexDirection: 'row',
+    },
+    wrapLocationIcon: {
+        width: '100%',
+        height: '100%',
     },
     button: {
         width: 343,
