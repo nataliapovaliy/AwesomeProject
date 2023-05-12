@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
-        // fontFamily: 'RobotoRegular',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
@@ -46,8 +45,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         boxShadow: '0 0.5 0 rgba(0, 0, 0, 0.3)',
         backdropFilter: 'blur(13.5914)',
-        // borderBottomWidth: 1,
-        // borderBottomColor: '#BDBDBD',
     },
     titleHeader: {
         fontFamily: 'RobotoMedium',

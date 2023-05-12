@@ -39,7 +39,7 @@ export const RegistrationScreen = () => {
     dispatch(register(state))
     setstate(initialState)
     console.log('handleSubmit', state)
-    return (<Home />)
+    // return (<Home />)
     }
 
     if (!fontsLoaded) {
@@ -98,7 +98,7 @@ export const RegistrationScreen = () => {
                                 autoComplete="password"
                                 />
 
-                                <Text style={styles.textInput}> Показати </Text>
+                                <Text style={styles.textInput}>Показати</Text>
                             </View>
                         </KeyboardAvoidingView>
 

@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     width: 70,
     height: 40,
     borderRadius: 20,
-    // paddingTop: 9,
   },
 });
 
