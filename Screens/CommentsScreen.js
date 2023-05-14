@@ -1,90 +1,98 @@
+import React, { useEffect, useRef, useState } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
+  TouchableOpacity,
+  FlatList,
 } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { useFonts } from 'expo-font'
+import { AntDesign } from '@expo/vector-icons'
+import {
+  doc,
+  updateDoc,
+  collection,
+  getDoc,
+  addDoc,
+  onSnapshot,
+} from 'firebase/firestore'
+import { db } from '../firebase/config'
+import { selectPhoto, selectUserId } from '../redux/auth/authSelectors'
+import { Comment } from '../Components/Comment'
+import { useSelector } from 'react-redux'
+import { Keyboard } from 'react-native'
 
-export const CommentsScreen = () => {
-  const [fonts] = useFonts({
-    RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
-    RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
-  })
+export const CommentsScreen = ({ route }) => {
+  const [comment, setComment] = useState('')
+  const [allComments, setAllComments] = useState()
+  const userId = useSelector(selectUserId)
+  const userPhoto = useSelector(selectPhoto)
+  const { photo, id } = route
+  const postId = route.key
+  const date = new Date()
 
-  if (!fonts) {
-    return null
+  useEffect(() => {
+    getAllPosts()
+  }, [])
+
+  const createPost = async () => {
+    await addDoc(collection(db, 'posts', postId, 'comments'), {
+      comment,
+      date,
+      userId,
+      userPhoto,
+    })
+    const docRef = doc(db, 'posts', postId)
+    const docSnap = await getDoc(docRef)
+    const docData = docSnap.data()
+    await updateDoc(docRef, { comments: docData.comments + 1 })
   }
+
+  const getAllPosts = async () => {
+    onSnapshot(collection(db, 'posts', postId, 'comments'), (querySnapshot) => {
+      const commentsArray = querySnapshot.docs
+
+        .map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+        .sort((a, b) => a.date.seconds - b.date.seconds)
+
+      setAllComments(commentsArray)
+    })
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.commentWrap}>
-          <View style={styles.commentImageWrap}>
-            <Image
-              source={{ uri: 'https://reactjs.org/logo-og.png' }}
-              style={styles.commentImage}
-            />
-          </View>
-          <View style={styles.commentlist}>
-            <View style={styles.commentitem}>
-              <View style={styles.commentAvatarWrap}>
-                <Image
-                  source={require('../assets/images/avatarUser.png')}
-                  style={styles.commentAvatar}
-                />
-              </View>
-              <View style={styles.commentTextWrap}>
-                <Text style={styles.commentText}>
-                  "Really love your most recent photo. I’ve been trying to
-                  capture the same thing for a few months and would love some
-                  tips!"
-                </Text>
-                <Text style={styles.commentData}>09 июня, 2020 | 09:14</Text>
-              </View>
-            </View>
-            <View style={styles.commentitem}>
-              <View style={styles.commentTextWrap}>
-                <Text style={styles.commentText}>
-                  "Really love your most recent photo. I’ve been trying to
-                  capture the same thing for a few months and would love some
-                  tips!"
-                </Text>
-                <Text style={styles.commentData}>09 июня, 2020 | 09:14</Text>
-              </View>
-              <View style={styles.commentAvatarWrap}>
-                <Image
-                  source={require('../assets/images/avatarUser.png')}
-                  style={styles.commentAvatar}
-                />
-              </View>
-            </View>
-            <View style={styles.commentitem}>
-              <View style={styles.commentAvatarWrap}>
-                <Image
-                  source={require('../assets/images/avatarUser.png')}
-                  style={styles.commentAvatar}
-                />
-              </View>
-              <View style={styles.commentTextWrap}>
-                <Text style={styles.commentText}>
-                  "Really love your most recent photo. I’ve been trying to
-                  capture the same thing for a few months and would love some
-                  tips!"
-                </Text>
-                <Text style={styles.commentData}>09 июня, 2020 | 09:14</Text>
-              </View>
-            </View>
-            <TextInput style={styles.input} placeholder="Коментувати..." />
-            <View style={styles.commentIonicons}>
-              <Ionicons name="md-arrow-up-circle" size={34} color="#FF6C00" />
-            </View>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <Image style={styles.commentImage} source={{ uri: photo }} />
+
+      <FlatList
+        data={allComments}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <Comment item={item} />}
+      />
+      <View>
+        <TextInput
+          placeholder="Comment..."
+          style={styles.commentInput}
+          value={comment}
+          onChangeText={(text) => setComment(text)}
+        />
+        <TouchableOpacity activeOpacity={0.8} style={styles.commentButton}>
+          <AntDesign
+            name="arrowup"
+            size={24}
+            color="#FFFFFF"
+            style={styles.commentIconArrowup}
+            opacity={0.6}
+            onPress={() => {
+              setComment('')
+              Keyboard.dismiss()
+              createPost()
+            }}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -92,93 +100,41 @@ export const CommentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 32,
+    marginBottom: 16,
+    marginHorizontal: 16,
+    justifyContent: 'space-between',
     backgroundColor: '#fff',
     fontFamily: 'RobotoRegular',
-  },
-  commentWrap: {
-    display: 'flex',
-    gap: 32,
-    backgroundColor: '#fff',
-    width: '100%',
-    paddingHorizontal: 16,
-    paddingTop: 32,
   },
   commentImage: {
     width: 343,
     height: 240,
     borderRadius: 8,
-  },
-  commentImageWrap: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
+    marginBottom: 32,
   },
 
-  commentlist: {
-    gap: 24,
-  },
-  commentitem: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 16,
-  },
-  commentAvatarWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 50,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  commentAvatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 50,
-  },
-  commentTextWrap: {
-    backgroundColor: 'rgba(0, 0, 0, 0.03)',
-    borderBottomRightRadius: 6,
-    borderBottomLeftRadius: 6,
-    borderTopRightRadius: 6,
+  commentInput: {
     padding: 16,
-    width: 299,
-    gap: 8,
-  },
-  commentText: {
-    fontFamily: 'RobotoRegular',
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  commentData: {
-    fontFamily: 'RobotoRegular',
-    fontSize: 10,
-    lineHeight: 12,
-    textAlign: 'right',
-    color: '#BDBDBD',
-  },
-  input: {
-    position: 'relative',
-
-    height: 50,
-    width: 343,
-    padding: 16,
-
+    borderRadius: 50,
     borderWidth: 1,
-    borderRadius: 100,
     borderColor: '#E8E8E8',
-    borderEndWidth: 1,
     backgroundColor: '#F6F6F6',
-    color: '#BDBDBD',
+    fontFamily: 'RobotoMedium',
     fontSize: 16,
     lineHeight: 19,
   },
-  commentIonicons: {
-    position: 'absolute',
-    top: 395,
-    left: 300,
-    textAlign: 'center',
+  commentButton: {
+    marginTop: -43,
+    marginRight: 8,
+    height: 34,
+    width: 34,
+    borderRadius: 50,
+    backgroundColor: '#FF6C00',
+    alignSelf: 'flex-end',
+  },
+  commentIconArrowup: {
+    alignSelf: 'center',
+    paddingTop: 4,
   },
 })
