@@ -4,9 +4,16 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, View, Text } from 'react-native-web';
 import { useNavigation } from '@react-navigation/native';
+import { logout } from '../redux/auth/authOperations'
+import { useDispatch } from 'react-redux'
 
 export const Header = ({ title }) => {
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+
+    const handleSubmit = () => {
+        dispatch(logout())
+    }
     const [fontsLoaded] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
         RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
@@ -27,7 +34,7 @@ export const Header = ({ title }) => {
 
             <MaterialIcons name="logout" size={24} color="black"
                 backgroundColor="transparent"
-                onPress={() => navigation.navigate("LoginScreen")}
+                onPress={handleSubmit}
             />
         </View>
     );

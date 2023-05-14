@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     StyleSheet,
     Text,
@@ -10,20 +10,47 @@ import {
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
     Keyboard,
-    Platform,
+    FlatList,
 } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 import { SimpleLineIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
+import { collection, onSnapshot } from 'firebase/firestore'
+import { db, auth } from '../firebase/config'
+import { selectName } from '../redux/auth/authSelectors'
+import { useSelector, useDispatch } from 'react-redux'
+import Post from '../Components/Post'
+import { logout } from '../redux/auth/authOperations'
 
 export const ProfileScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+    const [userPosts, setUserPosts] = useState([])
+    const userName = useSelector(selectName)
+    
     const [fonts] = useFonts({
         RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
         RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
     })
+
+    useEffect(() => {
+        getUserPosts()
+    }, [])
+
+    const getUserPosts = async () => {
+        onSnapshot(collection(db, 'posts'), (snapshot) => {
+            const posts = snapshot.docs.map((doc) => ({
+                ...doc.data(), id: doc.id,
+            }))
+        setUserPosts(posts)
+        })
+    }
+
+    const logOut = () => {
+        dispatch(logout())
+    }
 
     if (!fonts) {
         return null
@@ -31,58 +58,43 @@ export const ProfileScreen = () => {
 
     return (
         <View style={styles.container}>
-        <ImageBackground
-            source={require('../assets/images/imgbg.png')}
-            resizeMode="cover"
-            style={styles.image}
-        >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.wrap}>
-                <View style={styles.wrapImage}>
-                <AntDesign
-                    name="pluscircleo"
-                    size={25}
-                    color="#FF6C00"
-                    backgroundColor="white"
-                    style={styles.buttonAddPhoto}
-                />
-                </View>
-                <View style={styles.wrapIonicons}>
-                <Ionicons name="exit-outline" size={24} color="#BDBDBD" onPress={() => navigation.navigate("LoginScreen")}/>
-                </View>
-                <Text style={styles.title}>Natali Romanova</Text>
-                <View style={styles.card}>
-                <View style={styles.cardImageWrap}>
-                    <Image
-                    source={{ uri: 'https://reactjs.org/logo-og.png' }}
-                    style={styles.cardImage}
-                    />
-                </View>
-                <View style={styles.cardTextwrap}>
-                    <Text style={styles.cardText}>Лic</Text>
-                </View>
-                <View style={styles.cardInner}>
-                    <View style={styles.cardWrapper}>
-                    <Ionicons name="chatbubble" size={24} color="#FF6C00" onPress={() => navigation.navigate("CommentsScreen")} />
-                    <Text style={styles.cardNumber}>8</Text>
+            <ImageBackground
+                source={require('../assets/images/imgbg.png')}
+                resizeMode="cover"
+                style={styles.image}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.wrap}>
+                        <View style={styles.wrapImage}>
+                            <AntDesign
+                                name="closecircleo"
+                                size={25}
+                                color="#E8E8E8"
+                                style={styles.closecircleoIcon}
+                            />
+                        </View>
+                        <View style={styles.wrapIonicons}>
+                            <Ionicons name="exit-outline" size={24} color="#BDBDBD" onPress={logOut}/>
+                        </View>
+                                
+                        <Text style={styles.title}>{userName}</Text>
+                                
+                        <FlatList
+                            data={userPosts}
+                            style={styles.postsList}
+                            keyExtractor={(__, index) => index.toString()}
+                            renderItem={({ item, index }) => (
+                                <Post
+                                post={item}
+                                navigation={navigation}
+                                isLastItem={index === userPosts.length - 1}
+                                forProfileScreen
+                                />
+                            )}
+                        />
                     </View>
-                    <View style={styles.cardWrapper}>
-                    <AntDesign name="like2" size={24} color="#FF6C00" />
-                    <Text style={styles.cardNumber}>153</Text>
-                    </View>
-                    <View style={styles.cardWrapperMap}>
-                    <SimpleLineIcons
-                        name="location-pin"
-                        size={24}
-                        color="black"
-                    />
-                    <Text style={styles.cardLink}>Ukraine</Text>
-                    </View>
-                </View>
-                </View>
-            </View>
-            </TouchableWithoutFeedback>
-        </ImageBackground>
+                </TouchableWithoutFeedback>
+            </ImageBackground>
         </View>
     )
 }
@@ -93,6 +105,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         fontFamily: 'RobotoRegular',
         paddingBottom: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     image: {
         width: 400,
@@ -106,10 +120,16 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         backgroundColor: '#F6F6F6',
-
         borderRadius: 16,
         top: -60,
         left: 141,
+    },
+    closecircleoIcon: {
+        backgroundColor: '#fff',
+        position: 'absolute',
+        left: 108,
+        top: 80,
+        borderRadius: 25,
     },
     buttonAddPhoto: {
         position: 'absolute',
@@ -122,7 +142,6 @@ const styles = StyleSheet.create({
         right: 30,
         top: 18,
     },
-
     title: {
         fontSize: 30,
         lineHeight: 35,
@@ -141,60 +160,8 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
     },
-    card: {
-        flex: 1,
-    },
-    cardImage: {
-        width: 343,
-        height: 240,
-    },
-    cardImageWrap: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    cardText: {
-        marginTop: 8,
-        marginStart: 16,
-        fontSize: 16,
-        lineHeight: 19,
-        letterSpacing: 0.01,
-        textAlign: 'start',
-        fontFamily: 'RobotoMedium',
-    },
-    cardInner: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: 8,
-    },
-    cardWrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 8,
-        alignItems: 'center',
-        marginRight: 24,
-        marginStart: 16,
-        justifyContent: 'flex-start',
-    },
-    cardWrapperMap: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 4,
-        alignItems: 'center',
-        marginLeft: 90,
-        marginRight: 16,
-        marginStart: 16,
-    },
-    cardNumber: {
-        fontSize: 16,
-        lineHeight: 19,
-        letterSpacing: 0.01,
-        fontFamily: 'RobotoMedium',
-    },
-    cardLink: {
-        fontSize: 16,
-        lineHeight: 19,
-        letterSpacing: 0.01,
-        fontFamily: 'RobotoMedium',
+    postsList: {
+        marginHorizontal: 8,
+        height: '50%',
     },
 })

@@ -86,7 +86,7 @@ export const RegistrationScreen = () => {
                             autoComplete="email"
                         />
 
-                        <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+                        <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} >
                             <View style={styles.inputPass}>
                                 <TextInput
                                 style={styles.input}
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        fontFamily: 'Roboto-Regular',
+        fontFamily: 'RobotoRegular',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         lineHeight: 35,
         letterSpacing: 0.01,
         textAlign: 'center',
-        fontFamily: 'Roboto-Medium',
+        fontFamily: 'RobotoMedium',
     },
     form: {
         paddingHorizontal: 16,
