@@ -56,9 +56,11 @@ export const Home = () => {
       
         <Tabs.Screen
           name="CreatePosts"
+
           component={CreatPostsScreen}
           options={({ navigation }) => ({
               headerShown: true,
+
               headerTitleAlign: 'center',
               headerStyle: styles.bottomBorder,
               headerLeft: () => (
