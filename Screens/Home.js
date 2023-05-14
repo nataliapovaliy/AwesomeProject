@@ -53,14 +53,14 @@ export const Home = () => {
             }}
         />
       
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="Створити публікацію"
           component={CreatPostsScreen}
           options={{
               headerShown: true,
               header: ({ navigation, route }) => <Header title={route.name} />,
             }}
-        />
+        /> */}
           
         <Tabs.Screen
           name="Profile"
